@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCAN AI - Wallet Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700&display=swap');
+
+        :root {
+            --primary: #0EA5E9;
+            --primary-dark: #0284C7;
+            --secondary: #6366F1;
+            --dark: #0F172A;
+            --darker: #020617;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--darker);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .syne {
+            font-family: 'Syne', sans-serif;
+        }
+
+        .glow-text {
+            color: var(--primary);
+            text-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
+        }
+
+        .scanner-card {
+            background: linear-gradient(45deg, rgba(14, 165, 233, 0.1), rgba(99, 102, 241, 0.1));
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scanner-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.2), transparent);
+            animation: scan 2s infinite;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(15, 23, 42, 0.4));
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .cyber-grid {
+            background-image: 
+                linear-gradient(to right, rgba(14, 165, 233, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(14, 165, 233, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .progress-bar {
+            width: 0%;
+            transition: width 12s linear;
+        }
+
+        .progress-bar.active {
+            width: 100%;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-950">
+    <div class="min-h-screen cyber-grid py-20">
+        <div class="container mx-auto px-6 max-w-4xl">
+            <div class="text-center mb-12">
+                <h1 class="text-5xl font-bold mb-6 syne">
+                    AI Wallet <span class="glow-text">Analysis</span>
+                </h1>
+                <p class="text-gray-400 text-lg">
+                    Enter your Solana wallet address for personalized trading insights
+                </p>
+            </div>
+
+            <div class="scanner-card rounded-2xl p-8 mb-8">
+                <form id="walletForm" class="space-y-6">
+                    <div>
+                        <input
+                            type="text"
+                            id="walletInput"
+                            placeholder="Enter Solana Wallet Address"
+                            class="w-full bg-slate-900/50 border border-sky-500/20 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-sky-500 transition-colors"
+                        />
+                    </div>
+
+                    <div id="errorAlert" class="hidden bg-red-900/20 border border-red-500/50 text-red-200 p-4 rounded-lg">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12" y2="16"></line>
+                            </svg>
+                            <span>Please enter a valid Solana wallet address</span>
+                        </div>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="w-full bg-gradient-to-r from-sky-500 to-indigo-500 py-3 rounded-lg font-semibold hover:scale-105 transition-transform disabled:opacity-50 disabled:hover:scale-100"
+                    >
+                        Analyze Wallet
+                    </button>
+                </form>
+            </div>
+
+            <div id="progressSection" class="hidden feature-card rounded-2xl p-8">
+                <div class="space-y-6">
+                    <!-- Progress steps will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const steps = [
+            'Connecting to Solana Network',
+            'Analyzing Transaction History',
+            'Processing Trading Patterns',
+            'Computing Risk Metrics',
+            'Creating AI Strategy'
+        ];
+
+        const form = document.getElementById('walletForm');
+        const input = document.getElementById('walletInput');
+        const errorAlert = document.getElementById('errorAlert');
+        const progressSection = document.getElementById('progressSection');
+
+        function validateSolanaAddress(address) {
+            const base58Regex = /^[1-9A-HJ-NP-Za-km-z]{44}$/;
+            return base58Regex.test(address);
+        }
+
+        function createStepElement(step, index) {
+            return `
+                <div class="flex items-center space-x-4">
+                    <div class="step-indicator" data-step="${index}">
+                        <div class="h-6 w-6 rounded-full border-2 border-gray-700 flex items-center justify-center">
+                            ${index === 0 ? '<svg class="spinner text-sky-500 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>' : ''}
+                        </div>
+                    </div>
+                    <span class="step-text ${index === 0 ? 'text-white' : 'text-gray-600'}">${step}</span>
+                    ${index < 4 ? `
+                        <div class="flex-1 h-1 bg-slate-800 rounded-full overflow-hidden">
+                            <div class="progress-bar h-full bg-gradient-to-r from-sky-500 to-indigo-500"></div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function updateStepStatus(index) {
+            const indicators = document.querySelectorAll('.step-indicator');
+            const texts = document.querySelectorAll('.step-text');
+            const bars = document.querySelectorAll('.progress-bar');
+
+            indicators.forEach((indicator, i) => {
+                const checkmark = `<svg class="text-sky-500 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+                const spinner = `<svg class="spinner text-sky-500 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>`;
+                
+                if (i < index) {
+                    indicator.innerHTML = checkmark;
+                    texts[i].classList.remove('text-gray-600');
+                    texts[i].classList.add('text-white');
+                    if (bars[i]) bars[i].classList.add('active');
+                } else if (i === index) {
+                    indicator.innerHTML = spinner;
+                    texts[i].classList.remove('text-gray-600');
+                    texts[i].classList.add('text-white');
+                    if (bars[i]) bars[i].classList.remove('active');
+                }
+            });
+        }
+
+        function startAnalysis() {
+            progressSection.innerHTML = steps.map((step, index) => createStepElement(step, index)).join('');
+            progressSection.classList.remove('hidden');
+            
+            let currentStep = 0;
+            updateStepStatus(currentStep);
+
+            const interval = setInterval(() => {
+                if (currentStep < 4) {
+                    currentStep++;
+                    updateStepStatus(currentStep);
+                } else {
+                    clearInterval(interval);
+                }
+            }, 12000);
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const address = input.value.trim();
+
+            errorAlert.classList.add('hidden');
+            
+            if (!validateSolanaAddress(address)) {
+                errorAlert.classList.remove('hidden');
+                return;
+            }
+
+            input.disabled = true;
+            form.querySelector('button').disabled = true;
+            startAnalysis();
+        });
+    </script>
+</body>
+</html>

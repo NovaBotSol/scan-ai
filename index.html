@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCAN AI - Trading Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/ScrollTrigger.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700&display=swap');
+
+        :root {
+            --primary: #0EA5E9;
+            --primary-dark: #0284C7;
+            --secondary: #6366F1;
+            --dark: #0F172A;
+            --darker: #020617;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--darker);
+            color: white;
+        }
+
+        .syne {
+            font-family: 'Syne', sans-serif;
+        }
+
+        .glow-text {
+            color: var(--primary);
+            text-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
+        }
+
+        .nav-glass {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(14, 165, 233, 0.1);
+        }
+
+        .hero-gradient {
+            background: radial-gradient(circle at top right, rgba(14, 165, 233, 0.1), transparent 60%),
+                        radial-gradient(circle at bottom left, rgba(99, 102, 241, 0.1), transparent 60%);
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(15, 23, 42, 0.4));
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(14, 165, 233, 0.4);
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.15);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            backdrop-filter: blur(8px);
+        }
+
+        .scanner-card {
+            background: linear-gradient(45deg, rgba(14, 165, 233, 0.1), rgba(99, 102, 241, 0.1));
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scanner-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.2), transparent);
+            animation: scan 2s infinite;
+        }
+
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .cyber-grid {
+            background-image: 
+                linear-gradient(to right, rgba(14, 165, 233, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(14, 165, 233, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .timeline-item {
+            border-left: 2px solid var(--primary);
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+    </style>
+</head>
+<body class="bg-slate-950">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 nav-glass">
+        <div class="container mx-auto px-6">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center gap-8">
+                    <div class="syne text-2xl font-bold">
+                        SCAN<span class="glow-text">AI</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-12">
+                    <a href="#features" class="hover:text-sky-400 transition-colors">Features</a>
+                    <a href="#scanner" class="hover:text-sky-400 transition-colors">Scanner</a>
+                    <a href="#analytics" class="hover:text-sky-400 transition-colors">Analytics</a>
+                    <a href="scanner.html" class="inline-block bg-sky-500 hover:bg-sky-600 px-6 py-2 rounded-full transition-colors text-white no-underline">
+                        Scan Your Wallet Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen hero-gradient flex items-center justify-center pt-20">
+        <div class="max-w-screen-xl mx-auto px-6 text-center">
+            <h1 class="text-6xl md:text-7xl font-bold mb-8 syne">
+                Elevate Your Trading with
+                <span class="glow-text">AI-Powered</span> 
+                Analysis
+            </h1>
+            <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-12">
+                SCAN AI analyzes your Solana wallet, learns from pump.fun data, and provides personalized trading insights to help you make smarter decisions and maximize your returns.
+            </p>
+            <a href="scanner.html" class="inline-block bg-gradient-to-r from-sky-500 to-indigo-500 px-8 py-4 rounded-lg font-semibold hover:scale-105 transition-transform text-lg text-white no-underline">
+                Scan Your Wallet Now
+            </a>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="py-32 cyber-grid relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-20">
+                <h2 class="text-5xl font-bold mb-6 syne">Advanced Trading Intelligence</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    Powered by sophisticated AI trained on pump.fun and Solana blockchain data, SCAN AI delivers personalized trading insights.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="feature-card p-8 rounded-xl">
+                    <div class="text-5xl mb-6">🔍</div>
+                    <h3 class="text-xl font-bold mb-4">Deep Wallet Analysis</h3>
+                    <p class="text-gray-400">Our AI scans your entire trading history, identifying patterns and opportunities you might have missed.</p>
+                </div>
+                
+                <div class="feature-card p-8 rounded-xl">
+                    <div class="text-5xl mb-6">📊</div>
+                    <h3 class="text-xl font-bold mb-4">Performance Metrics</h3>
+                    <p class="text-gray-400">Get detailed insights into your trading performance with advanced analytics and personalized scoring.</p>
+                </div>
+                
+                <div class="feature-card p-8 rounded-xl">
+                    <div class="text-5xl mb-6">🎯</div>
+                    <h3 class="text-xl font-bold mb-4">Custom Recommendations</h3>
+                    <p class="text-gray-400">Receive tailored trading advice based on your portfolio composition and market conditions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scanner Section -->
+    <section id="scanner" class="py-32 relative">
+        <div class="container mx-auto px-6">
+            <div class="scanner-card rounded-2xl p-12">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-4xl font-bold mb-6 syne">Instant Wallet Intelligence</h2>
+                        <p class="text-gray-300 mb-8">Connect your Solana wallet and let our AI analyze your trading patterns, portfolio allocation, and market timing to provide actionable insights.</p>
+                        <a href="scanner.html" class="inline-block bg-sky-500 hover:bg-sky-600 px-8 py-4 rounded-lg transition-colors text-white no-underline">
+                            Start Your Analysis
+                        </a>
+                    </div>
+                    <div class="relative">
+                        <div class="w-full h-64 flex items-center justify-center bg-slate-800/20 rounded-xl overflow-hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" class="w-full h-full">
+                                <!-- Definitions for filters and gradients -->
+                                <defs>
+                                    <!-- Outer glow effect -->
+                                    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                                        <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+                                        <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0   0 0 0 0 0.5   1 0 0 0 1  0 0 0 0.8 0"/>
+                                        <feMerge>
+                                            <feMergeNode/>
+                                            <feMergeNode in="SourceGraphic"/>
+                                        </feMerge>
+                                    </filter>
+
+                                    <!-- Radial gradient for the brain base -->
+                                    <radialGradient id="brainGradient" cx="50%" cy="50%" r="50%">
+                                        <stop offset="0%" stop-color="#60A5FA"/>
+                                        <stop offset="100%" stop-color="#1E40AF"/>
+                                    </radialGradient>
+
+                                    <!-- Pulse animation -->
+                                    <radialGradient id="pulseGradient" cx="50%" cy="50%" r="50%">
+                                        <stop offset="0%" stop-color="#93C5FD">
+                                            <animate attributeName="stop-color" 
+                                                values="#93C5FD; #3B82F6; #93C5FD"
+                                                dur="2s" repeatCount="indefinite"/>
+                                        </stop>
+                                        <stop offset="100%" stop-color="#1E40AF">
+                                            <animate attributeName="stop-color"
+                                                values="#1E40AF; #2563EB; #1E40AF"
+                                                dur="2s" repeatCount="indefinite"/>
+                                        </stop>
+                                    </radialGradient>
+
+                                    <!-- Neural network connection animation -->
+                                    <filter id="neuralGlow">
+                                        <feGaussianBlur in="SourceGraphic" stdDeviation="2"/>
+                                        <feColorMatrix type="matrix" 
+                                            values="0 0 0 0 0   0 0 0 0 0.7   1 0 0 0 1  0 0 0 0.5 0"/>
+                                    </filter>
+                                </defs>
+
+                                <!-- Background circle with pulse effect -->
+                                <circle cx="250" cy="250" r="200" fill="url(#pulseGradient)" opacity="0.1">
+                                    <animate attributeName="r" 
+                                        values="190;200;190"
+                                        dur="2s"
+                                        repeatCount="indefinite"/>
+                                    <animate attributeName="opacity"
+                                        values="0.1;0.2;0.1"
+                                        dur="2s"
+                                        repeatCount="indefinite"/>
+                                </circle>
+
+                                <!-- Brain base structure -->
+                                <g filter="url(#glow)">
+                                    <!-- Left hemisphere -->
+                                    <path d="M250 100 Q 150 100, 100 200 Q 80 300, 150 350 Q 200 400, 250 380" 
+                                        fill="url(#brainGradient)" opacity="0.9">
+                                        <animate attributeName="d"
+                                            dur="3s"
+                                            repeatCount="indefinite"
+                                            values="
+                                                M250 100 Q 150 100, 100 200 Q 80 300, 150 350 Q 200 400, 250 380;
+                                                M250 100 Q 140 110, 95 205 Q 75 305, 155 355 Q 205 405, 250 380;
+                                                M250 100 Q 150 100, 100 200 Q 80 300, 150 350 Q 200 400, 250 380"
+                                        />
+                                    </path>
+
+                                    <!-- Right hemisphere -->
+                                    <path d="M250 100 Q 350 100, 400 200 Q 420 300, 350 350 Q 300 400, 250 380"
+                                        fill="url(#brainGradient)" opacity="0.9">
+                                        <animate attributeName="d"
+                                            dur="3s"
+                                            repeatCount="indefinite"
+                                            values="
+                                                M250 100 Q 350 100, 400 200 Q 420 300, 350 350 Q 300 400, 250 380;
+                                                M250 100 Q 360 110, 405 205 Q 425 305, 345 355 Q 295 405, 250 380;
+                                                M250 100 Q 350 100, 400 200 Q 420 300, 350 350 Q 300 400, 250 380"
+                                        />
+                                    </path>
+                                </g>
+
+                                <!-- Neural network connections -->
+                                <g filter="url(#neuralGlow)">
+                                    <!-- Animated connection lines -->
+                                    <circle cx="150" cy="200" r="3" fill="#60A5FA">
+                                        <animate attributeName="opacity"
+                                            values="1;0.4;1"
+                                            dur="1.5s"
+                                            repeatCount="indefinite"/>
+                                    </circle>
+                                    <circle cx="350" cy="200" r="3" fill="#60A5FA">
+                                        <animate attributeName="opacity"
+                                            values="0.4;1;0.4"
+                                            dur="1.5s"
+                                            repeatCount="indefinite"/>
+                                    </circle>
+                                    <line x1="150" y1="200" x2="350" y2="200" stroke="#60A5FA" stroke-width="2">
+                                        <animate attributeName="opacity"
+                                            values="0.4;1;0.4"
+                                            dur="1.5s"
+                                            repeatCount="indefinite"/>
+                                    </line>
+
+                                    <!-- Additional neural connections -->
+                                    <g>
+                                        <circle cx="200" cy="300" r="3" fill="#60A5FA">
+                                            <animate attributeName="opacity"
+                                                values="1;0.4;1"
+                                                dur="2s"
+                                                repeatCount="indefinite"/>
+                                        </circle>
+                                        <circle cx="300" cy="300" r="3" fill="#60A5FA">
+                                            <animate attributeName="opacity"
+                                                values="0.4;1;0.4"
+                                                dur="2s"
+                                                repeatCount="indefinite"/>
+                                        </circle>
+                                        <line x1="200" y1="300" x2="300" y2="300" stroke="#60A5FA" stroke-width="2">
+                                            <animate attributeName="opacity"
+                                                values="0.4;1;0.4"
+                                                dur="2s"
+                                                repeatCount="indefinite"/>
+                                        </line>
+                                    </g>
+                                </g>
+
+                                <!-- Floating particles -->
+                                <g>
+                                    <circle cx="180" cy="150" r="2" fill="#93C5FD">
+                                        <animate attributeName="cy"
+                                            values="150;140;150"
+                                            dur="3s"
+                                            repeatCount="indefinite"/>
+                                        <animate attributeName="opacity"
+                                            values="1;0.5;1"
+                                            dur="3s"
+                                            repeatCount="indefinite"/>
+                                    </circle>
+                                    <circle cx="320" cy="150" r="2" fill="#93C5FD">
+                                        <animate attributeName="cy"
+                                            values="150;160;150"
+                                            dur="2.5s"
+                                            repeatCount="indefinite"/>
+                                        <animate attributeName="opacity"
+                                            values="0.5;1;0.5"
+                                            dur="2.5s"
+                                            repeatCount="indefinite"/>
+                                    </circle>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytics Section -->
+    <section id="analytics" class="py-32 relative bg-slate-900/50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-20">
+                <h2 class="text-5xl font-bold mb-6 syne">Data-Driven Trading</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    Transform your trading strategy with AI-powered insights and real-time market analysis.
+                </p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card rounded-xl p-8 text-center">
+                    <div class="text-4xl font-bold text-sky-400 mb-2">500ms</div>
+                    <div class="text-gray-400">Average Scan Time</div>
+                </div>
+                <div class="stat-card rounded-xl p-8 text-center">
+                    <div class="text-4xl font-bold text-sky-400 mb-2">1M+</div>
+                    <div class="text-gray-400">Trades Analyzed</div>
+                </div>
+                <div class="stat-card rounded-xl p-8 text-center">
+                    <div class="text-4xl font-bold text-sky-400 mb-2">94%</div>
+                    <div class="text-gray-400">Prediction Accuracy</div>
+                </div>
+                <div class="stat-card rounded-xl p-8 text-center">
+                    <div class="text-4xl font-bold text-sky-400 mb-2">24/7</div>
+                    <div class="text-gray-400">Market Monitoring</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="py-32 relative">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold mb-12 text-center syne">Development Timeline</h2>
+                
+                <div class="space-y-12">
+                    <div class="timeline-item pl-8 pb-8">
+                        <h3 class="text-2xl font-bold mb-2">Launch Phase</h3>
+                        <p class="text-gray-400">Initial release of SCAN AI with core wallet analysis features and basic trading insights.</p>
+                    </div>
+                    
+                    <div class="timeline-item pl-8 pb-8">
+                        <h3 class="text-2xl font-bold mb-2">Enhanced Analytics</h3>
+                        <p class="text-gray-400">Integration of advanced market metrics and expanded pattern recognition capabilities.</p>
+                    </div>
+                    
+                    <div class="timeline-item pl-8 pb-8">
+                        <h3 class="text-2xl font-bold mb-2">AI Optimization</h3>
+                        <p class="text-gray-400">Implementation of deep learning models for more accurate trading predictions and insights.</p>
+                    </div>
+                    
+                    <div class="timeline-item pl-8">
+                        <h3 class="text-2xl font-bold mb-2">Global Expansion</h3>
+                        <p class="text-gray-400">Scaling our platform to support multiple blockchains and expanded trading features.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 border-t border-sky-900/30">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-12">
+                <div class="col-span-2 md:col-span-1">
+                    <div class="text-2xl font-bold mb-6 syne">
+                        SCAN<span class="glow-text">AI</span>
+                    </div>
+                    <p class="text-gray-400">Elevate your trading with AI</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Navigation</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#features" class="hover:text-sky-400 transition-colors">Features</a></li>
+                        <li><a href="#scanner" class="hover:text-sky-400 transition-colors">Scanner</a></li>
+                        <li><a href="#analytics" class="hover:text-sky-400 transition-colors">Analytics</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Follow Us</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="https://x.com/scanai_sol" class="hover:text-sky-400 transition-colors">Twitter</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Get Started</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#scanner" class="hover:text-sky-400 transition-colors">Scan Wallet</a></li>
+                        <li><a href="#features" class="hover:text-sky-400 transition-colors">Learn More</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize GSAP
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Animation for feature cards
+        const featureCards = document.querySelectorAll('.feature-card');
+        featureCards.forEach((card, index) => {
+            gsap.from(card, {
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                delay: index * 0.2,
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top bottom-=100",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+
+        // Animation for stats
+        const statCards = document.querySelectorAll('.stat-card');
+        statCards.forEach((card, index) => {
+            gsap.from(card, {
+                y: 30,
+                opacity: 0,
+                duration: 0.6,
+                delay: index * 0.1,
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top bottom-=50",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+
+        // Animation for timeline items
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        timelineItems.forEach((item, index) => {
+            gsap.from(item, {
+                x: -50,
+                opacity: 0,
+                duration: 0.8,
+                delay: index * 0.2,
+                scrollTrigger: {
+                    trigger: item,
+                    start: "top bottom-=100",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+    </script>
+</body>
+</html>

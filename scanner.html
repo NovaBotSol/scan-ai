@@ -71,7 +71,7 @@
 
         .progress-bar {
             width: 0%;
-            transition: width 12s linear;
+            transition: width 10s linear;
         }
 
         .progress-bar.active {
@@ -175,27 +175,27 @@
             `;
         }
 
-        function updateStepStatus(index) {
+        function updateStepStatus(index, isBarComplete = false) {
             const indicators = document.querySelectorAll('.step-indicator');
             const texts = document.querySelectorAll('.step-text');
-            const bars = document.querySelectorAll('.progress-bar');
-
-            indicators.forEach((indicator, i) => {
+            
+            if (isBarComplete) {
+                // Only update checkmark when bar is complete
                 const checkmark = `<svg class="text-sky-500 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
-                const spinner = `<svg class="spinner text-sky-500 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>`;
+                indicators[index].innerHTML = checkmark;
                 
-                if (i < index) {
-                    indicator.innerHTML = checkmark;
-                    texts[i].classList.remove('text-gray-600');
-                    texts[i].classList.add('text-white');
-                    if (bars[i]) bars[i].classList.add('active');
-                } else if (i === index) {
-                    indicator.innerHTML = spinner;
-                    texts[i].classList.remove('text-gray-600');
-                    texts[i].classList.add('text-white');
-                    if (bars[i]) bars[i].classList.remove('active');
+                // Start next step if available
+                if (index < 4) {
+                    const spinner = `<svg class="spinner text-sky-500 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>`;
+                    indicators[index + 1].innerHTML = spinner;
+                    texts[index + 1].classList.remove('text-gray-600');
+                    texts[index + 1].classList.add('text-white');
                 }
-            });
+            } else {
+                // Just update the text color for the current step
+                texts[index].classList.remove('text-gray-600');
+                texts[index].classList.add('text-white');
+            }
         }
 
         function startAnalysis() {
@@ -205,14 +205,29 @@
             let currentStep = 0;
             updateStepStatus(currentStep);
 
-            const interval = setInterval(() => {
+            function processStep() {
                 if (currentStep < 4) {
-                    currentStep++;
-                    updateStepStatus(currentStep);
-                } else {
-                    clearInterval(interval);
+                    const bars = document.querySelectorAll('.progress-bar');
+                    const currentBar = bars[currentStep];
+                    
+                    // Ensure DOM is updated before starting animation
+                    requestAnimationFrame(() => {
+                        // Start progress bar animation
+                        currentBar.classList.add('active');
+                        
+                        // Wait for progress bar to complete
+                        setTimeout(() => {
+                            // Update with checkmark and start next step
+                            updateStepStatus(currentStep, true);
+                            currentStep++;
+                            processStep();
+                        }, 10000); // Match this with the CSS transition time
+                    });
                 }
-            }, 12000);
+            }
+
+            // Small delay to ensure proper rendering before starting animation
+            setTimeout(processStep, 100);
         }
 
         form.addEventListener('submit', (e) => {
